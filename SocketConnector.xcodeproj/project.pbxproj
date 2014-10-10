@@ -14,6 +14,11 @@
 		954928D819E7983100B616F8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 954928D719E7983100B616F8 /* Images.xcassets */; };
 		954928DB19E7983100B616F8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 954928D919E7983100B616F8 /* LaunchScreen.xib */; };
 		954928E719E7983200B616F8 /* SocketConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954928E619E7983200B616F8 /* SocketConnectorTests.swift */; };
+		954928F119E7984400B616F8 /* SocketConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954928F019E7984400B616F8 /* SocketConnector.swift */; };
+		954928F419E798DE00B616F8 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 954928F219E798DE00B616F8 /* .gitignore */; };
+		954928F519E798DE00B616F8 /* TemplateIcon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 954928F319E798DE00B616F8 /* TemplateIcon2x.png */; };
+		954928F719E7991A00B616F8 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 954928F619E7991A00B616F8 /* LICENSE */; };
+		954928F919E7993900B616F8 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 954928F819E7993900B616F8 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +43,11 @@
 		954928E019E7983200B616F8 /* SocketConnectorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocketConnectorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		954928E519E7983200B616F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		954928E619E7983200B616F8 /* SocketConnectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketConnectorTests.swift; sourceTree = "<group>"; };
+		954928F019E7984400B616F8 /* SocketConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketConnector.swift; sourceTree = "<group>"; };
+		954928F219E798DE00B616F8 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		954928F319E798DE00B616F8 /* TemplateIcon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TemplateIcon2x.png; sourceTree = "<group>"; };
+		954928F619E7991A00B616F8 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		954928F819E7993900B616F8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +74,10 @@
 				954928CA19E7983100B616F8 /* SocketConnector */,
 				954928E319E7983200B616F8 /* SocketConnectorTests */,
 				954928C919E7983100B616F8 /* Products */,
+				954928F819E7993900B616F8 /* README.md */,
+				954928F619E7991A00B616F8 /* LICENSE */,
+				954928F219E798DE00B616F8 /* .gitignore */,
+				954928F319E798DE00B616F8 /* TemplateIcon2x.png */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,6 +95,7 @@
 			children = (
 				954928CD19E7983100B616F8 /* AppDelegate.swift */,
 				954928D219E7983100B616F8 /* ViewController.swift */,
+				954928F019E7984400B616F8 /* SocketConnector.swift */,
 				954928D419E7983100B616F8 /* Main.storyboard */,
 				954928D719E7983100B616F8 /* Images.xcassets */,
 				954928D919E7983100B616F8 /* LaunchScreen.xib */,
@@ -195,6 +210,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				954928F719E7991A00B616F8 /* LICENSE in Resources */,
+				954928F519E798DE00B616F8 /* TemplateIcon2x.png in Resources */,
+				954928F419E798DE00B616F8 /* .gitignore in Resources */,
 				954928D619E7983100B616F8 /* Main.storyboard in Resources */,
 				954928DB19E7983100B616F8 /* LaunchScreen.xib in Resources */,
 				954928D819E7983100B616F8 /* Images.xcassets in Resources */,
@@ -215,7 +233,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				954928F119E7984400B616F8 /* SocketConnector.swift in Sources */,
 				954928D319E7983100B616F8 /* ViewController.swift in Sources */,
+				954928F919E7993900B616F8 /* README.md in Sources */,
 				954928D119E7983100B616F8 /* SocketConnector.xcdatamodeld in Sources */,
 				954928CE19E7983100B616F8 /* AppDelegate.swift in Sources */,
 			);
