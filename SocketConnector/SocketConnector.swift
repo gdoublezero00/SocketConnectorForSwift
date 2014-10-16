@@ -10,8 +10,8 @@
 import UIKit
 
 protocol SocketConnectorDelegate {
-    func socketSuccess() -> Void
-    func socketError() -> Void
+    func socketSuccess(info:Dictionary<String, String>!) -> Void
+    func socketError(info:Dictionary<String, String>!, error:NSError!) -> Void
     func socketTimeout() -> Void
 }
 
@@ -22,11 +22,14 @@ class SocketConnector: NSObject, NSStreamDelegate {
     private var inputStream:NSInputStream!
     private var outputStream:NSOutputStream!
     private var timeoutTimer:NSTimer!
-    private var server:NSString!
+    private var tag:String!
+    private var server:String!
     private var port:UInt32!
-    private var message:NSString!
+    private var message:String!
     private var retry:Int!
     private var statusDictionary:Dictionary<String, String>!
+    private var statusError:NSError! = nil
+    private var mutableBuffer:NSMutableData! = nil
     
     //
     // MARK: Main Connection
@@ -37,7 +40,6 @@ class SocketConnector: NSObject, NSStreamDelegate {
         self.message = requestMessage
         self.retry = retryCount
         self.statusDictionary = Dictionary()
-        
         self.connect()
     }
     
@@ -47,7 +49,16 @@ class SocketConnector: NSObject, NSStreamDelegate {
         self.message = requestMessage
         self.retry = 0
         self.statusDictionary = Dictionary()
-        
+        self.connect()
+    }
+    
+    func connectionStartWithTag(tag: NSString, server: NSString, port: Int, requestMessage: NSString, retryCount: Int) -> Void {
+        self.tag = tag
+        self.server = server
+        self.port = UInt32(port)
+        self.message = requestMessage
+        self.retry = retryCount
+        self.statusDictionary = Dictionary()
         self.connect()
     }
     
@@ -60,7 +71,7 @@ class SocketConnector: NSObject, NSStreamDelegate {
         
         CFStreamCreatePairWithSocketToHost(
             nil,
-            self.server as CFStringRef,
+            self.server as NSString as CFStringRef,
             self.port,
             &readStream,
             &writeStream
@@ -87,12 +98,12 @@ class SocketConnector: NSObject, NSStreamDelegate {
     //
     func handlerSocketSuccess() -> Void {
         self.connectionClose()
-        return delegate.socketSuccess()
+        return delegate.socketSuccess(self.statusDictionary)
     }
     func handlerSocketError() -> Void {
         self.connectionClose()
         if self.retry == 0 {
-            return delegate.socketError()
+            return delegate.socketError(self.statusDictionary, error:self.statusError)
         } else {
             self.retry = self.retry - 1
             let delay = 3.0 * Double(NSEC_PER_SEC)
@@ -125,6 +136,7 @@ class SocketConnector: NSObject, NSStreamDelegate {
         case NSStreamEvent.ErrorOccurred:
             // Connection Error
             let err:NSError = aStream.streamError!
+            self.statusDictionary["Tag"] = self.tag
             self.statusDictionary["Message"] = ""
             self.statusDictionary["StatusCode"] = "-1"
             self.statusDictionary["StatusMessage"] = err.localizedDescription
@@ -133,17 +145,16 @@ class SocketConnector: NSObject, NSStreamDelegate {
         case NSStreamEvent.HasSpaceAvailable:
             // Send Message
             if aStream == self.outputStream {
-                if (self.message.length > 0) {
-                    let buf = self.message.cStringUsingEncoding(NSASCIIStringEncoding)
-                    let len:UInt = strlen(buf)
+                if (self.message.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+                    let buf = self.message.cStringUsingEncoding(NSASCIIStringEncoding)!
+                    let len:UInt = UInt(strlen(buf))
                     self.outputStream.write(UnsafePointer<UInt8>(buf), maxLength: Int(len))
                     self.message = ""
+                    self.mutableBuffer = NSMutableData.data()
                 }
-                
             }
             break
         case NSStreamEvent.HasBytesAvailable:
-            var mutableBuffer:NSMutableData = NSMutableData.data()
             if aStream == self.inputStream {
                 var buf = [UInt8](count: BUFFER_SIZE, repeatedValue: 0)
                 while self.inputStream.hasBytesAvailable {
@@ -152,6 +163,7 @@ class SocketConnector: NSObject, NSStreamDelegate {
                         mutableBuffer.appendBytes(buf, length: len)
                     }
                 }
+                self.statusDictionary["Tag"] = self.tag
                 self.statusDictionary["Message"] = NSString(bytes: mutableBuffer.bytes, length: mutableBuffer.length, encoding: NSShiftJISStringEncoding)
                 self.statusDictionary["StatusCode"] = "0"
                 self.statusDictionary["StatusMessage"] = "OK"
@@ -180,6 +192,7 @@ class SocketConnector: NSObject, NSStreamDelegate {
         self.stopConnectionTimer()
         self.connectionClose()
         // Call delegate
+        self.statusDictionary["Tag"] = self.tag
         self.statusDictionary["Message"] = ""
         self.statusDictionary["StatusCode"] = "-2"
         self.statusDictionary["StatusMessage"] = "TimeOut"
